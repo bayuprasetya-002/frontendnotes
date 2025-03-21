@@ -25,7 +25,7 @@ formulir.addEventListener("submit", (e) => {
     if (!id || id === "") {
         // Tambah catatan baru dengan tanggal sekarang
         axios
-            .post("http://localhost:5000/notes", { 
+            .post(`${BASE_URL}/notes`, { 
                 judul, 
                 deskripsi, 
                 tanggal: tanggalEdit // Menyimpan waktu sekarang dengan format ISO
@@ -43,7 +43,7 @@ formulir.addEventListener("submit", (e) => {
     } else {
         // Edit catatan (update tanggal juga)
         axios
-            .put(`http://localhost:5000/notes/${id}`, { 
+            .put(`${BASE_URL}/notes/${id}`, { 
                 judul, 
                 deskripsi, 
                 tanggal: tanggalEdit // Mengirimkan tanggal baru saat pengeditan
@@ -63,10 +63,11 @@ formulir.addEventListener("submit", (e) => {
             .catch((error) => console.log(error));
     }
 });
+
 // Fungsi GET untuk mengambil data dan menampilkan tanggal yang benar
 async function getNotes() {
     try {
-        const { data } = await axios.get("http://localhost:5000/notes");
+        const { data } = await axios.get(`${BASE_URL}/notes`);
 
         const table = document.querySelector("#table-notes");
         let tampilan = "";
@@ -110,7 +111,6 @@ function formatDate(timestamp) {
     return date.toLocaleString("id-ID", { dateStyle: "short", timeStyle: "short" });
 }
 
-
 // Hapus catatan
 function hapusNote() {
     const kumpulan_tombol_hapus = document.querySelectorAll(".btn-hapus");
@@ -123,7 +123,7 @@ function hapusNote() {
             if (!confirm("Apakah Anda yakin ingin menghapus catatan ini?")) return;
 
             axios
-                .delete(`http://localhost:5000/notes/${id}`)
+                .delete(`${BASE_URL}/notes/${id}`)
                 .then(() => getNotes())
                 .catch((error) => console.log(error));
         });
